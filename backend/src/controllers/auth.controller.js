@@ -2,11 +2,11 @@ import User from "../models/User.js"; // Import the User model
 import jwt from "jsonwebtoken"; // Import JWT for token generation
 
 export async function signup(req, res) {
-    const {email, password, firstName, lastName} = req.body;
+    const {email, password, firstName, lastName, gender} = req.body;
 
     try {
         
-        if(!email || !password || !firstName || !lastName ) {
+        if(!email || !password || !firstName || !lastName || !gender) {
             return res.status(400).json({message: "All fields are required"});
         }
 
@@ -18,23 +18,39 @@ export async function signup(req, res) {
         if(!emailRegex.test(email)) {
             return res.status(400).json({message: "Invalid email format"});
         }
-        
+
+        const allowedGenders = ["male","female"];
+        if(!allowedGenders.includes(gender.toLowerCase())) {
+            return res.status(400).json({message:"Invalid gender value"});
+        }
+
         const existingUser = await User.findOne({ email });
         if(existingUser) {
             return res.status(400).json({message: "Email already exists"});
         }
         
-        const idx = Math.floor(Math.random() * 8) + 1; // Randomly select an avatar
-        const randomAvatar = `../assets/${idx}.png`;
+        // Image Selection Logic
+        function getRandomAvatar(gender) {
+            const fAvatars = ['F-4', 'F-5', 'F-8'];
+            const mAvatars = ['M-1', 'M-2', 'M-3', 'M-6', 'M-7'];
+
+            let avatarPool = gender === 'female' ? fAvatars
+                        : gender === 'male' ? mAvatars
+                        : [...fAvatars, ...mAvatars]; // fallback
+
+            const idx = Math.floor(Math.random() * avatarPool.length);
+            return `../assets/${avatarPool[idx]}.png`;
+        }
+        const randomAvatar = getRandomAvatar(gender.toLowerCase());
 
         const newUser = await User.create({
             email,
             firstName,
             lastName,
+            gender,
             password,
             profilePicture: randomAvatar
         });
-
 
 
         const token = jwt.sign({userId:newUser._id}, process.env.JWT_SECRET, {expiresIn: "7d"});
