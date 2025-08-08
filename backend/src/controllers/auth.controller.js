@@ -1,6 +1,8 @@
+import { upsertStreamUser } from "../lib/stream.js";
 import User from "../models/User.js"; // Import the User model
 import jwt from "jsonwebtoken"; // Import JWT for token generation
 
+// SIGNUP
 export async function signup(req, res) {
     const {email, password, firstName, lastName, gender} = req.body;
 
@@ -52,6 +54,21 @@ export async function signup(req, res) {
             profilePicture: randomAvatar
         });
 
+        // Uploading data on Stream
+        try {
+            await upsertStreamUser({
+                id: newUser._id.toString(),
+                name: `${newUser.firstName} ${newUser.lastName}`,
+                // name: newUser.firstName,
+                image: newUser.profilePicture || "",
+            });
+            console.log(`Stream user upserted for ${newUser.firstName} ${newUser.lastName}`);
+            
+        } catch (error) {
+            console.log("Error in upserting Stream user:", error);
+            
+        }
+
         // JSON Web Token (JWT) generation for Signup
         const token = jwt.sign({userId:newUser._id}, process.env.JWT_SECRET, {expiresIn: "7d"});
 
@@ -71,6 +88,7 @@ export async function signup(req, res) {
     }
 }
 
+// LOGIN
 export async function login(req, res) {
     try {
         const {email, password} = req.body;
@@ -104,6 +122,8 @@ export async function login(req, res) {
     }
 }
 
+
+// LOGOUT
 export function logout(req, res) {
     res.clearCookie("jwt")
     res.status(200).json({message: "Logged out successfully"});
