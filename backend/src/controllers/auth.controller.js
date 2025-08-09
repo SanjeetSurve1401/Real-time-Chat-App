@@ -122,9 +122,54 @@ export async function login(req, res) {
     }
 }
 
-
 // LOGOUT
 export function logout(req, res) {
     res.clearCookie("jwt")
     res.status(200).json({message: "Logged out successfully"});
+}
+
+// Onboarding
+export async function onboard(req, res) {
+    try {
+        const userId = req.user._id; // Get user ID from the request object
+        const{firstName, lastName, bio, nativeLanguage, learningLanguage, location }=req.body
+
+        if(!firstName || !lastName || !bio || !nativeLanguage || !learningLanguage || !location) {
+            return res.status(400).json({
+                message: "All fields are required",
+                missingFields: [
+                    !firstName && "firstName",
+                    !lastName && "lastName",
+                    !bio && "bio",
+                    !nativeLanguage && "nativeLanguage",
+                    !learningLanguage && "learningLanguage",
+                    !location && "location",
+                ].filter(Boolean),
+            });
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(userId, {
+            ...req.body,
+            isOnboarded: true,
+        }, {new:true});
+
+        if(!updatedUser) return res.status(404).json({message: "User not found"});
+        // Uploading data on Stream
+        try {
+            await upsertStreamUser({
+                id: updatedUser._id.toString(),
+                name: `${updatedUser.firstName} ${updatedUser.lastName}`,
+                image : updatedUser.profilePicture || "",    
+            })
+            console.log(`Stream user updated after onboarding for ${updatedUser.firstName} ${updatedUser.lastName}`);
+        } catch (StreamError) {
+            console.log("Error in updating Stream user during onboarding:", StreamError.message);   
+        }
+        res.status(200).json({success: true, user: updatedUser});
+
+    } catch (error) {
+        console.log("Error in onboard controller:", error);
+        res.status(500).json({message: "Internal server error"});        
+    }
+    
 }
