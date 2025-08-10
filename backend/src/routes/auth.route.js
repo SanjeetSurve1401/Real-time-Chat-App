@@ -1,3 +1,6 @@
+// Created the auth route for handling user authentication
+// This file is used to define the authentication routes for user signup, login, logout, and onboarding
+
 import express from 'express';
 import { login, logout, signup, onboard } from '../controllers/auth.controller.js';
 import { protectRoute } from '../middleware/auth.middleware.js';

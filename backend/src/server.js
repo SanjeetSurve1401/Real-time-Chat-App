@@ -1,8 +1,12 @@
+// This file is the entry point for the backend server
+// It sets up the Express server, connects to the database, and defines the routes
+
 import express from "express"// its a web framework and help for creating APIs 
 import "dotenv/config"; // to load environment variables from .env file
 import cookieParser from "cookie-parser"; // to parse cookies
 
 import authRoutes from "./routes/auth.route.js"; // import the auth routes
+import userRoutes from "./routes/user.route.js"; // import the auth routes
 import { connectDB } from "./lib/db.js"; // import the database connection function
 
 // Initialize the express application

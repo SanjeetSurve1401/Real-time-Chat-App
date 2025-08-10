@@ -1,3 +1,6 @@
+// Created the Schema for User model
+// This file is used to define the User model schema for MongoDB using Mongoose
+
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 

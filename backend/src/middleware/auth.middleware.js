@@ -1,3 +1,6 @@
+// This file is used to protect routes by verifying JWT tokens
+// It checks if the user is authenticated before allowing access to protected routes
+
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 
