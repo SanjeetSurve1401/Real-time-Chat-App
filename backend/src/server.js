@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser"; // to parse cookies
 import authRoutes from "./routes/auth.route.js"; // import the auth routes
 import userRoutes from "./routes/user.route.js"; // import the auth routes
 import { connectDB } from "./lib/db.js"; // import the database connection function
+import chatRoutes from "./routes/chat.route.js"; // import the chat routes
 
 // Initialize the express application
 
@@ -20,6 +21,8 @@ app.use(cookieParser()); // Middleware to parse cookies
 
 // Instead of creating multiple routes in a single file create a separate file for routes
 app.use("/api/auth", authRoutes)
+
+app.use("/api/chat",chatRoutes)
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
