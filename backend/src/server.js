@@ -4,7 +4,7 @@
 import express from "express"// its a web framework and help for creating APIs 
 import "dotenv/config"; // to load environment variables from .env file
 import cookieParser from "cookie-parser"; // to parse cookies
-
+import cors from "cors"; // to enable CORS (Cross-Origin Resource Sharing)
 import authRoutes from "./routes/auth.route.js"; // import the auth routes
 import userRoutes from "./routes/user.route.js"; // import the auth routes
 import { connectDB } from "./lib/db.js"; // import the database connection function
@@ -15,6 +15,11 @@ import chatRoutes from "./routes/chat.route.js"; // import the chat routes
     
 const app = express()
 const PORT = process.env.PORT 
+
+app.use(cors({
+    origin: "http://localhost:5173", // allow requests from this origin
+    credentials: true, // allow cookies to be sent with requests
+}));
 
 app.use(express.json()); // Middleware to parse JSON bodies
 app.use(cookieParser()); // Middleware to parse cookies

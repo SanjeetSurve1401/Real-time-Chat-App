@@ -6,12 +6,25 @@ import ChatPage from './pages/ChatPage.jsx'
 import NotificationPage from './pages/NotificationPage.jsx'
 import CallPage from './pages/CallPage.jsx'
 import OnboardingPage from './pages/OnboardingPage.jsx'
-import toast, { Toaster } from 'react-hot-toast'
+import { Toaster } from 'react-hot-toast'
+import { useQuery } from '@tanstack/react-query'
+import { axiosInstance } from './lib/axios.js'
+
 
 const App = () => {
+
+  const {data, isLoading, error} = useQuery({
+    queryKey:["todos"],
+    queryFn: async () => {
+      const res = await axiosInstance.get("http://localhost:5001/api/auth/me");
+      return res.data;
+    }
+  })
+  console.log(data);
+  
+  
   return (
     <div className='h-screen' data-theme="coffee"> 
-    <button className="btn glass" onClick={() => toast.success("Hello World!")}>Create a Toast</button>
       <Routes>
         <Route path='/' element={<HomePage />} />
         <Route path='/signup' element={<SignUpPage />} />
