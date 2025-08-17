@@ -26,7 +26,7 @@ app.use(cookieParser()); // Middleware to parse cookies
 
 // Instead of creating multiple routes in a single file create a separate file for routes
 app.use("/api/auth", authRoutes)
-
+app.use("/api/users", userRoutes)
 app.use("/api/chat",chatRoutes)
 
 app.listen(PORT, () => {
