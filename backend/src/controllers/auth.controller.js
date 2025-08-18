@@ -34,18 +34,21 @@ export async function signup(req, res) {
         // Image Selection Logic
         // for avtars
         // https://uifaces.co
-        function getRandomAvatar(gender) {
-            const fAvatars = ['F-4', 'F-5', 'F-8', 'F-9', 'F-10', 'F-11', 'F-12', 'F-13', 'F-14', 'F-15', 'F-16', 'F-17', 'F-18', 'F-19', 'F-20', 'F-21', 'F-22', 'F-23'];
-            const mAvatars = ['M-1', 'M-2', 'M-3', 'M-6', 'M-7', 'M-24', 'M-25', 'M-26', 'M-27', 'M-28', 'M-29'];
+        // function getRandomAvatar(gender) {
+        //     const fAvatars = ['F-4', 'F-5', 'F-8', 'F-9', 'F-10', 'F-11', 'F-12', 'F-13', 'F-14', 'F-15', 'F-16', 'F-17', 'F-18', 'F-19', 'F-20', 'F-21', 'F-22', 'F-23'];
+        //     const mAvatars = ['M-1', 'M-2', 'M-3', 'M-6', 'M-7', 'M-24', 'M-25', 'M-26', 'M-27', 'M-28', 'M-29'];
 
-            let avatarPool = gender === 'female' ? fAvatars
-                        : gender === 'male' ? mAvatars
-                        : [...fAvatars, ...mAvatars]; // fallback
+        //     let avatarPool = gender === 'female' ? fAvatars
+        //                 : gender === 'male' ? mAvatars
+        //                 : [...fAvatars, ...mAvatars]; // fallback
 
-            const idx = Math.floor(Math.random() * avatarPool.length);
-            return `../assets/${avatarPool[idx]}.png`;
-        }
-        const randomAvatar = getRandomAvatar(gender.toLowerCase());
+        //     const idx = Math.floor(Math.random() * avatarPool.length);
+        //     return `../assets/${avatarPool[idx]}.png`;
+        // }
+        // const randomAvatar = getRandomAvatar(gender.toLowerCase());
+
+        const idx = Math.floor(Math.random() *100) + 1;
+        const randomAvatar = `https://avatar.iran.liara.run/public/${idx}.png`
 
         const newUser = await User.create({
             email,
