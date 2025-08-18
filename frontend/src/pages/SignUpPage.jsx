@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { LayoutDashboardIcon } from 'lucide-react'
 import {Link} from 'react-router'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import {signup} from  '../lib/api.js'
+import useSignUp from '../../hooks/useSignUp.js'
 
 const SignUpPage = () => {
 
@@ -14,12 +13,8 @@ const SignUpPage = () => {
     password: "",
   });
 
-  const queryClient = useQueryClient();
-
-  const {mutate:singupMutation, isPending, error}= useMutation({
-    mutationFn: signup,
-    onSuccess: ()=> queryClient.invalidateQueries({queryKey: ["authUser"]})
-  })
+  // Created a cutom hook
+  const {isPending, error, singupMutation} = useSignUp();
 
   const handleSignup = (e)=>{
     e.preventDefault();
@@ -36,7 +31,7 @@ const SignUpPage = () => {
         <div className='mb-4 flex items-center justify-start gap-2'>
           <LayoutDashboardIcon className="size-9 text-primary" />
           <span className='text-3xl font-bold font-mono bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary tracking-wider'>
-              Chit-Chat
+              Chatify
           </span>
         </div>
 
