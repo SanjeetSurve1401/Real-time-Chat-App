@@ -10,6 +10,7 @@ import { Toaster } from 'react-hot-toast'
 
 import PageLoader from './component/PageLoader.jsx'
 import useAuthUser from '../hooks/useAuthUser.js'
+import Layout from './component/Layout'
 
 
 const App = () => {
@@ -26,7 +27,9 @@ const App = () => {
         <Route path='/'
           element={
             isAuthenticated && isOnboarded ? (
-              <HomePage />
+              <Layout showSidebar={true}>
+                <HomePage />
+              </Layout>
             ) : (
               <Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />
             )
